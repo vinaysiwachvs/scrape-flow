@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, InboxIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
+import WorkflowCard from "./_components/WorkflowCard";
 
 function page() {
   return (
@@ -35,8 +36,8 @@ function UserWorkflowsSkeleton() {
 }
 
 async function UserWorkflows() {
-  const Workflows = await getWorkflowsForUser();
-  if (!Workflows) {
+  const workflows = await getWorkflowsForUser();
+  if (!workflows) {
     return (
       <Alert variant={"destructive"}>
         <AlertCircle className="w-4 h-4" />
@@ -48,7 +49,7 @@ async function UserWorkflows() {
     );
   }
 
-  if (Workflows.length === 0) {
+  if (workflows.length === 0) {
     return (
       <div className="flex flex-col gap-4 h-full items-center justify-center">
         <div className="rounded-full bg-accent w-20 h-20 flex items-center justify-center">
@@ -64,7 +65,13 @@ async function UserWorkflows() {
       </div>
     );
   }
-  return <div className=""></div>;
+  return (
+    <div className="grid grid-cols-1 gap-4">
+      {workflows.map((workflow) => (
+        <WorkflowCard key={workflow.id} workflow={workflow} />
+      ))}
+    </div>
+  );
 }
 
 export default page;
